@@ -1,4 +1,6 @@
+from random import randint
 """
+etat:
     0: vide
     1: bombe
     2: drapeau
@@ -9,7 +11,7 @@ def generate_grid():
     grid = {}
     for colonne in range(1, 11):
         for ligne in range(1, 11):
-            grid[(colonne, ligne)] = ["0", "0"]  # [etat, nombre_de_mines_autour]
+            grid[(colonne, ligne)] = ["0", "0", False]  # [etat, nombre_de_mines_autour, discovered]
     return grid
 
 grid = generate_grid()
@@ -32,7 +34,12 @@ print(liste_position)
 for i in range(20):
     [x,y] = liste_position[0]
     if liste_position[0] in grid:
-        grid[(x,y)] = [1, 0]
+        grid[(x,y)] = [-1, 0]
         liste_position.remove(liste_position[0])
 
-print(grid)
+grid = generate_grid()
+
+print("------------- DEMINEUR ------------\n")
+print("     1  2  3  4  5  6  7  8  9 ")
+print("  --------------------------------")
+print("")
