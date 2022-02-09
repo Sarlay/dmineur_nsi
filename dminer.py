@@ -3,7 +3,7 @@ from random import randint
 etat:
     0: vide
     -1: bombe
-    - 2: drapeau
+    -2: drapeau
 
 """
 
@@ -20,9 +20,9 @@ def generate_mines():
     liste_position = []
     mine = 0
     while mine < 20:
-        x=randint(1, 11)
-        y=randint(1, 11)
-        if [x,y] not in liste_position:
+        x=randint(1, 10)
+        y=randint(1, 10)
+        if (x,y) not in liste_position:
             liste_position.append((x,y))
             mine+=1
      return liste_position
