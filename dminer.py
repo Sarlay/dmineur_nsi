@@ -4,7 +4,6 @@ etat:
     0: vide
     -1: bombe
     -2: drapeau
-
 """
 
 def generate_grid():
@@ -32,10 +31,11 @@ print(liste_position)
 """
 def add_mines_to_grid(liste_position, grid):
     for i in range(20):
-        [x,y] = liste_position[0]
         if liste_position[0] in grid:
+            [x,y] = liste_position[0]
             grid[(x,y)] = ["-1", "0", False]
             liste_position.remove(liste_position[0])
+    return grid
 
             
             
@@ -70,17 +70,42 @@ def show_debug_grid(grid):
             print(type_element, end=" ")
         print("|") # closes the right side of the grid
     print("    --------------------------------")
+'''
+def generate_grid_player():
+    grid_player = {}
+    for colonnex in range(1, 11):
+        for ligney in range(1, 11):
+            grid[(colonnex, ligney)] = ["."]  
+    return grid_player
+'''
+list_cases = []
+for nb in range(101):
+    list_cases.append(".")
+    
+
+choix_joueur = int(input("Que voulez vous faire ?, découvrir une case: 1 ; planter un drapeau: 2"))
+xpoint = []
+ypoint = []
+if choix_joueur = 1:
+    if 1 < positionx_joueur and positiony_joueur < 10:
+        positionx_joueur = int(input("saisissez l'abscisse de la case"))
+        positiony_joueur = int(input("saisissez l'ordonnée de la case"))
+        grid[(xpoint)] = [positionx_joueur]
+        grid[(ypoint)] = [positiony_joueur]
+else:
+    positionx_drapeau = int(input("saisissez l'abscisse de la case"))
+    positiony_drapeau = int(input("saisissez l'ordonnée de la case"))
+    if 1 < positionx_drapeau and positiony_drapeau < 10:
+        
+      
+print("""
+====    grille secrète:  ====
+""")
+print("      1  2  3  4  5  6  7  8  9  10")
+print("    ________________________________")
 
 
-
+grid_player = generate_grid_player()
 grid = generate_grid()
 liste_position = generate_mines()
 add_mines_to_grid(liste_position, grid)
-
-
-
-
-print("------------- DEMINEUR ------------\n")
-print("     1  2  3  4  5  6  7  8  9 ")
-print("  --------------------------------")
-print("")
