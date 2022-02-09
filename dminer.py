@@ -25,7 +25,7 @@ def generate_mines():
         if (x,y) not in liste_position:
             liste_position.append((x,y))
             mine+=1
-     return liste_position
+    return liste_position
 
 """
 print(liste_position)
@@ -75,7 +75,7 @@ def show_debug_grid(grid):
 
 grid = generate_grid()
 liste_position = generate_mines()
-add_mines_to_grid(liste_position)
+add_mines_to_grid(liste_position, grid)
 
 
 
