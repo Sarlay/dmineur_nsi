@@ -34,7 +34,7 @@ def add_mines_to_grid(liste_position, grid):
     for i in range(20):
         [x,y] = liste_position[0]
         if liste_position[0] in grid:
-            grid[(x,y)] = [-1, 0]
+            grid[(x,y)] = ["-1", "0", False]
             liste_position.remove(liste_position[0])
 
             
@@ -45,7 +45,7 @@ def calculate_near_sum(coo, grid):
     for x in range(-1, 2):
         for y in range(-1, 2):
             if x != 0 or y != 0:
-                if grid[(int(coo[0]-x), coo[1]-y)][0] == 1:
+                if grid[(int(coo[0]-x), coo[1]-y)][0] == "-1":
                    print(f"true, in {x}, {y}")
                    near_sum += 1
     return near_sum
