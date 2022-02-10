@@ -12,7 +12,7 @@ def generate_grid():
     grid = {}
     for colonne in range(1, 11):
         for ligne in range(1, 11):
-            grid[(colonne, ligne)] = ["0", "0", False]  # [type, number_of_mines_surronding, discovered]
+            grid[(colonne, ligne)] = ["0", "0", False, False]  # [type, number_of_mines_surronding, discovered]
     return grid
 
 
@@ -95,11 +95,21 @@ def show_player_grid(grid):
 
 
 
+def check_if_coordinate_valid(positionx_joueur, positiony_joueur):
+    if 1 <= positionx_joueur <= 10 and 1 <= positiony_joueur <= 10:
+        return True
+    else:
+        return False
+
 # the main function
 
 grid = generate_grid()
 liste_position = generate_mines()
 add_mines_to_grid(liste_position, grid)
+
+
+
+
 
 while True:
     show_player_grid(grid)
@@ -107,7 +117,7 @@ while True:
     if choix_joueur == "c" or choix_joueur == "d":
         positionx_joueur = int(input("saisissez l'abscisse de la case: "))
         positiony_joueur = int(input("saisissez l'ordonnée de la case: "))
-        if 1 <= positionx_joueur <= 10 and 1 <= positiony_joueur <= 10: # check if entry exists     
+        if check_if_coordinate_valid:   # check if entry exists     
             if grid[(positionx_joueur, positiony_joueur)][2] is False:  # if case hasn't been discovered yet:
                 if grid[(positionx_joueur, positiony_joueur)][0] == "-1":  # :
                     if choix_joueur == "c":
@@ -126,3 +136,4 @@ while True:
             print("case invalide")
     elif choix_joueur == "nsi":
         show_debug_grid(grid)
+
