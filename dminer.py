@@ -1,16 +1,18 @@
 from random import randint
-"""
-type:
-     0: vide
-    -1: bombe
-    -2: drapeau
-"""
+
 
 def generate_grid():
+    """Generate the grid
+    type:
+     0: empty
+    -1: mine
+    -2: flag
+    """
+
     grid = {}
     for colonne in range(1, 11):
         for ligne in range(1, 11):
-            grid[(colonne, ligne)] = ["0", "0", False]  # [type, nombre_de_mines_autour, discovered]
+            grid[(colonne, ligne)] = ["0", "0", False]  # [type, number_of_mines_surronding, discovered]
     return grid
 
 
@@ -72,6 +74,7 @@ def show_debug_grid(grid):
 
 
 def show_player_grid(grid):
+    """Prints the player grid"""
     print("""
 ====    grille démineur:  ====
 """)
@@ -91,7 +94,9 @@ def show_player_grid(grid):
     print("    --------------------------------")
 
 
+
 # the main function
+
 grid = generate_grid()
 liste_position = generate_mines()
 add_mines_to_grid(liste_position, grid)
@@ -107,14 +112,14 @@ while True:
                 if grid[(positionx_joueur, positiony_joueur)][0] == "-1":  # :
                     if choix_joueur == "c":
                         print("BOOM !")
-                    else:
+                    else:  # the choice of the player is 'd'
                         grid[(positionx_joueur, positiony_joueur)][0] = "-2" # replace type of element with a flag at coordinates                     
                     grid[(positionx_joueur, positiony_joueur)][2] = True  # mark the case as discovered
                 else:
                     print("pas de mine à cet endroit")
                     if choix_joueur == "d":
                         print("Pas de mine à cet endroit !")
-                    grid[(positionx_joueur, positiony_joueur)][2] = True  # :
+                    grid[(positionx_joueur, positiony_joueur)][2] = True  # mark case a disovered
             else:
                 print("case déjà découverte !")
         else:
