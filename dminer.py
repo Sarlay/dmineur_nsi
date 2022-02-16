@@ -16,7 +16,6 @@ def generate_grid():
     return grid
 
 
-
 def generate_mines():
     """create the position of 20 random mines"""
     liste_position = []
@@ -72,7 +71,6 @@ def show_debug_grid(grid):
     print("    --------------------------------")
 
 
-
 def show_player_grid(grid):
     """Prints the player grid"""
     print("""
@@ -81,18 +79,24 @@ def show_player_grid(grid):
     print("      1  2  3  4  5  6  7  8  9  10")
     print("    ________________________________")
     for y in range(1, 11):
-        if y == 10: ## for the last line
-            print(f"{y} | ", end="")  # remove a space because of the 2 digits causing line shift 
-        else:
+        if y == 10: ## for print 10 lines
+            print(f"{y} | ", end="")  
+        else:                           ##remove a space because of the 2 digits causing a line shift
             print(f"{y}  | ", end="")
         for x in range(1, 11):
-            if grid[(x, y)][2] is True: # if element is discovered by player: print it
-                print(" " + str(calculate_near_sum((x, y), grid)), end=" ")
+            if grid[(x, y)][2] is True: # when the element is discovered by the player it displays it
+                print(" " + str(calculate_near_sum((x, y), grid)), end=" ") 
+            elif grid[(x, y)][2] is None: # if he typed d the program therefore places a flag because d paces the last value of the dictionary in None
+                print(" #", end=" ") 
             else:
-                print(" .", end=" ")
-        print("|") # closes the right side of the grid
+                print(" .", end=" ") 
+        print("|") 
     print("    --------------------------------")
+# the main function
 
+grid = generate_grid()
+liste_position = generate_mines()
+add_mines_to_grid(liste_position, grid)
 
 
 def check_if_coordinate_valid(positionx_joueur, positiony_joueur):
@@ -101,39 +105,25 @@ def check_if_coordinate_valid(positionx_joueur, positiony_joueur):
     else:
         return False
 
-# the main function
-
-grid = generate_grid()
-liste_position = generate_mines()
-add_mines_to_grid(liste_position, grid)
-
-
-
-
-
 while True:
     show_player_grid(grid)
-    choix_joueur = str(input("Que voulez vous faire ?, découvrir une case: c ; planter un drapeau: d\n"))
-    if choix_joueur == "c" or choix_joueur == "d":
-        positionx_joueur = int(input("saisissez l'abscisse de la case: "))
-        positiony_joueur = int(input("saisissez l'ordonnée de la case: "))
-        if check_if_coordinate_valid:   # check if entry exists     
-            if grid[(positionx_joueur, positiony_joueur)][2] is False:  # if case hasn't been discovered yet:
-                if grid[(positionx_joueur, positiony_joueur)][0] == "-1":  # :
-                    if choix_joueur == "c":
+    choix_joueur = str(input("Que voulez vous faire ?,\ndécouvrir une case: c ; planter un drapeau: d\n")) 
+    if choix_joueur == "c" or choix_joueur == "d": 
+        positionx_joueur = int(input("saisissez l'abscisse de la case: "))   
+        positiony_joueur = int(input("saisissez l'ordonnée de la case: ")) 
+        if check_if_coordinate_valid:       
+            if grid[(positionx_joueur, positiony_joueur)][2] is False:  
+                if choix_joueur == "c": 
+                    if grid[(positionx_joueur, positiony_joueur)][0] == "-1":   
                         print("BOOM !")
-                    else:  # the choice of the player is 'd'
-                        grid[(positionx_joueur, positiony_joueur)][0] = "-2" # replace type of element with a flag at coordinates                     
-                    grid[(positionx_joueur, positiony_joueur)][2] = True  # mark the case as discovered
-                else:
-                    print("pas de mine à cet endroit")
-                    if choix_joueur == "d":
-                        print("Pas de mine à cet endroit !")
-                    grid[(positionx_joueur, positiony_joueur)][2] = True  # mark case a disovered
+                        exit() 
+                    grid[(positionx_joueur, positiony_joueur)][2] = True  
+                if choix_joueur == "d": 
+                    grid[(positionx_joueur, positiony_joueur)][2] = None 
+                    grid[(positionx_joueur, positiony_joueur)][0] == "-2" 
             else:
-                print("case déjà découverte !")
+                print("Ca marche pas frr") 
         else:
-            print("case invalide")
-    elif choix_joueur == "nsi":
-        show_debug_grid(grid)
-
+            print("case invalide !") 
+    elif choix_joueur == "NSI":  
+        show_debug_grid(grid) 
