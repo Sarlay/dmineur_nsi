@@ -1,8 +1,8 @@
 from random import randint
-from os import chdir, getcwd
-from colorama import Fore, Back, Style
+from tkinter import *
 
-def generate_grid():
+
+def generate_grid():  # Raphael
     """Generate the grid
     type:
      0: empty
@@ -17,7 +17,7 @@ def generate_grid():
     return grid
 
 
-def generate_mines():
+def generate_mines():  # cleante
     """create the position of 20 random mines"""
     liste_position = []
     mine = 0
@@ -30,7 +30,7 @@ def generate_mines():
     return liste_position
 
 
-def add_mines_to_grid(liste_position, grid):
+def add_mines_to_grid(liste_position, grid): # cleante
     for i in range(20):
         if liste_position[0] in grid:
             [x,y] = liste_position[0]
@@ -39,7 +39,7 @@ def add_mines_to_grid(liste_position, grid):
     return grid
 
 
-def calculate_near_sum(coo, grid):
+def calculate_near_sum(coo, grid): # Raphael
     near_sum = 0
     for x in range(-1, 2):
         for y in range(-1, 2):
@@ -52,7 +52,7 @@ def calculate_near_sum(coo, grid):
     return near_sum
 
     
-def show_debug_grid(grid):
+def show_debug_grid(grid):  # Raphael
     print("""
 ====    grille secrète:  ====
 """)
@@ -72,7 +72,7 @@ def show_debug_grid(grid):
     print("    --------------------------------")
 
 
-def show_player_grid(grid):
+def show_player_grid(grid):  # Cleante
     """Prints the player grid"""
     print("""
 ====    grille démineur:  ====
@@ -85,64 +85,90 @@ def show_player_grid(grid):
         else:                           ##remove a space because of the 2 digits causing a line shift
             print(f"{y}  | ", end="")
         for x in range(1, 11):
-            if grid[(x, y)][2] is True: # when the element is discovered by the player it displays it
+            if grid[(x, y)][1] is True: # if flag is placed here 
+                print(" #", end=" ")
+            elif grid[(x, y)][2] is True: # when the element is discovered by the player it displays it
                 print(" " + str(calculate_near_sum((x, y), grid)), end=" ") 
-            elif grid[(x, y)][2] is None: # if he typed d the program therefore places a flag because d paces the last value of the dictionary in None
-                print(" #", end=" ") 
             else:
                 print(" .", end=" ") 
         print("|") 
     print("    --------------------------------")
 
-# the main function
 
+def check_if_coordinate_valid(positionx, positiony):  # cleante
+    if 1 <= positionx <= 10 and 1 <= positiony <= 10:
+        return True
+    else:
+        return False
+
+def get_coordinates(): # Raphael
+    positionx = int(input("saisissez l'abscisse de la case: "))   
+    positiony = int(input("saisissez l'ordonnée de la case: ")) 
+    return positionx, positiony
+
+
+def interact_case(): # Raphael
+    positionx, positiony = get_coordinates()
+    coo_valid = check_if_coordinate_valid(positionx, positiony)
+    print(coo_valid)
+    if coo_valid and grid[(positionx, positiony)][2] is False:  # if case not discovered yet 
+        if grid[(positionx, positiony)][0] == "-1": # if the case is a mine  
+            print("BOOM !")
+            exit()
+        else:
+            grid[(positionx, positiony)][2] = True  # mark the case as discovered 
+    else:
+        if coo_valid is False:
+            print("Coordonees invalides !! Veuillez entrer des coordonees corrects")
+        
+        else:
+            print("Case déja découverte Veuillez choisir une autre case !")
+
+
+def interact_flag(): # Cleante
+    positionx, positiony = get_coordinates()
+    coo_valid = check_if_coordinate_valid(positionx, positiony)
+    interaction_type = input("Voulez vous ajouter (a) ou supprimer (s) un drappeau ? (a/s): ") 
+    if coo_valid and interaction_type == "a":
+        grid[(positionx, positiony)][1] = True  # add flag to the case at positionx, positiony coordinates
+    elif coo_valid and interaction_type == "s":
+        grid[(positionx, positiony)][1] = False  # add flag to the case at positionx, positiony coordinates
+    else:
+        if coo_valid is False:
+            print("Coordonees invalides !! Veuillez entrer des coordonees corrects")
+        
+        else:
+            print("Case déja découver, Veuillez choisir une autre case !")
+
+
+def get_highest_score(): # Cleante
+    score_file = open('highest_score.txt','r')
+    score = score_file.read()
+    score_file.close()
+    if score != "":
+        return int(score)
+    else:
+        return 0
+
+# the main function
 
 grid = generate_grid()
 liste_position = generate_mines()
 add_mines_to_grid(liste_position, grid)
 
-
-
-
-def check_if_coordinate_valid(positionx_joueur, positiony_joueur):
-    if 1 <= positionx_joueur <= 10 and 1 <= positiony_joueur <= 10:
-        return True
-    else:
-        return False
+highest_score = get_highest_score()
 
 case_valid = 0
 
 while True:
     show_player_grid(grid)
+    if case_valid > highest_score:
+        print("Nouveau record battu ! le score de {case_valid} est atteint")
     choix_joueur = str(input("Que voulez vous faire ?,\ndécouvrir une case: c ; planter un drapeau: d\n")) 
-    if choix_joueur == "c" or choix_joueur == "d": 
-        positionx_joueur = int(input("saisissez l'abscisse de la case: "))   
-        positiony_joueur = int(input("saisissez l'ordonnée de la case: ")) 
-        if check_if_coordinate_valid:       
-            if grid[(positionx_joueur, positiony_joueur)][2] is False:  
-                if choix_joueur == "c": 
-                    if grid[(positionx_joueur, positiony_joueur)][0] == "-1":   
-                        print('BOOM !, ton score est de", case_valid, "points')
-                        print_score=(input("voulez vous enregistrer votre score ?, répondez par OUI ou NON"))
-                        if print_score == "OUI":
-                            obFichier=open('Score_Démineur.txt','a')
-                            obFichier.write(str(case_valid))
-                            obFichier.close()
-                        else:
-                            exit()
-                    grid[(positionx_joueur, positiony_joueur)][2] = True 
-                    case_valid+=1 
-                if choix_joueur == "d": 
-                    grid[(positionx_joueur, positiony_joueur)][2] = None 
-                    grid[(positionx_joueur, positiony_joueur)][0] == "-2" 
-            else:
-                print("Ca marche pas frr") 
-        else:
-            print("case invalide !") 
-    if choix_joueur == "NSI":  
+    if choix_joueur == "c": 
+        interact_case()
+        case_valid += 1
+    elif choix_joueur == "d":
+        interact_flag()
+    elif choix_joueur == "NSI":  
         show_debug_grid(grid) 
-    elif case_valid == 5:
-        print("GG tu as survecu à cette torture")
-        exit()
-
-
