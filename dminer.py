@@ -7,13 +7,12 @@ def generate_grid():  # Raphael
     type:
      0: empty
     -1: mine
-    -2: flag
     """
 
     grid = {}
     for colonne in range(1, 11):
         for ligne in range(1, 11):
-            grid[(colonne, ligne)] = ["0", "0", False, False]  # [type, number_of_mines_surronding, discovered]
+            grid[(colonne, ligne)] = ["0", False, False]  # [type, number_of_mines_surronding, discovered_bool]
     return grid
 
 
@@ -51,6 +50,17 @@ def calculate_near_sum(coo, grid): # Raphael
                     pass
     return near_sum
 
+
+def show_near_empty_cases(coo, grid): # Raphael
+    for x in range(-1, 2):
+        for y in range(-1, 2):
+            if x != 0 or y != 0:
+                try:
+                    if grid[(int(coo[0]-x), int(coo[1]-y))][0] == "0":
+                        grid[(int(coo[0]-x), int(coo[1]-y))][2] = True
+                except:
+                    pass
+
     
 def show_debug_grid(grid):  # Raphael
     print("""
@@ -72,6 +82,18 @@ def show_debug_grid(grid):  # Raphael
     print("    --------------------------------")
 
 
+def get_color_prefix(number): # Raphael
+    if number == "1":
+        return "\033[1;36;40m" # bright cyan
+    if number == "2":
+        return "\033[1;32;40m" # bright green
+    if number == "3":
+        return "\033[1;31;40m" # bright red
+    if number == "4":
+        return "\033[1;37;40m" # white
+    else:
+        return ""
+
 def show_player_grid(grid):  # Cleante
     """Prints the player grid"""
     print("""
@@ -86,9 +108,10 @@ def show_player_grid(grid):  # Cleante
             print(f"{y}  | ", end="")
         for x in range(1, 11):
             if grid[(x, y)][1] is True: # if flag is placed here 
-                print(" #", end=" ")
+                print("\033[1;33;40m #\033[0m", end=" ")
             elif grid[(x, y)][2] is True: # when the element is discovered by the player it displays it
-                print(" " + str(calculate_near_sum((x, y), grid)), end=" ") 
+                near_sum = str(calculate_near_sum((x,y), grid))
+                print(" " + get_color_prefix(near_sum) + near_sum, end="\033[0m ") 
             else:
                 print(" .", end=" ") 
         print("|") 
@@ -107,9 +130,13 @@ def get_coordinates(): # Raphael
     return positionx, positiony
 
 
-def interact_case(): # Raphael
+def interact_case(first_move): # Raphael
     positionx, positiony = get_coordinates()
     coo_valid = check_if_coordinate_valid(positionx, positiony)
+    coo = positionx, positiony
+    if first_move is True: 
+        show_near_empty_cases(coo, grid)
+        first_move = False
     print(coo_valid)
     if coo_valid and grid[(positionx, positiony)][2] is False:  # if case not discovered yet 
         if grid[(positionx, positiony)][0] == "-1": # if the case is a mine  
@@ -157,7 +184,7 @@ liste_position = generate_mines()
 add_mines_to_grid(liste_position, grid)
 
 highest_score = get_highest_score()
-
+first_move = True
 case_valid = 0
 
 while True:
@@ -166,7 +193,7 @@ while True:
         print("Nouveau record battu ! le score de {case_valid} est atteint")
     choix_joueur = str(input("Que voulez vous faire ?,\ndécouvrir une case: c ; planter un drapeau: d\n")) 
     if choix_joueur == "c": 
-        interact_case()
+        interact_case(first_move)
         case_valid += 1
     elif choix_joueur == "d":
         interact_flag()
