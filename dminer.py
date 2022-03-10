@@ -147,7 +147,7 @@ def interact_case(first_move, grid): # Raphael
     if coo_valid and grid[(positionx, positiony)][2] is False:  # if case not discovered yet 
         if grid[(positionx, positiony)][0] == "-1": # if the case is a mine  
             print("BOOM !")
-            exit()
+            exit()  # quit the game
         else:
             grid[(positionx, positiony)][2] = True  # mark the case as discovered 
     else:
