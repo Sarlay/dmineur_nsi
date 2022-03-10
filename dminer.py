@@ -18,7 +18,7 @@ def generate_grid():  # Raphael
 
 
 def generate_mines(number_mines):  # cleante
-    """create the position of 20 random mines"""
+    """create the position of number_mines random mines"""
     liste_position = []
     mine = 0
     while mine < number_mines:
@@ -30,9 +30,9 @@ def generate_mines(number_mines):  # cleante
     return liste_position
 
 
-def add_mines_to_grid(liste_position, grid): # cleante
+def add_mines_to_grid(liste_position, grid, number_mines): # cleante
     """ insert mines to specific positions stored in liste_position """
-    for i in range(20):
+    for i in range(number_mines):
         if liste_position[0] in grid:
             [x,y] = liste_position[0]
             grid[(x,y)] = ["-1", "0", False]
@@ -144,7 +144,6 @@ def interact_case(first_move, grid): # Raphael
     coo = positionx, positiony
     if first_move is True: 
         show_near_empty_cases(coo, grid)
-    print(coo_valid)
     if coo_valid and grid[(positionx, positiony)][2] is False:  # if case not discovered yet 
         if grid[(positionx, positiony)][0] == "-1": # if the case is a mine  
             print("BOOM !")
@@ -153,7 +152,7 @@ def interact_case(first_move, grid): # Raphael
             grid[(positionx, positiony)][2] = True  # mark the case as discovered 
     else:
         if coo_valid is False:
-            print("Coordonees invalides !! Veuillez entrer des coordonees corrects")
+            print("\033[1;31;40m" + "Coordonees invalides !! Veuillez entrer des coordonees corrects" + "\033[0m")
         
         else:
             print("Case déja découverte Veuillez choisir une autre case !")
@@ -187,12 +186,20 @@ def get_highest_score(): # Cleante
         return 0  # no best score saved
 
 
+def save_highest_score(score): # Raphael
+    """ return the highest score stored in highest_score"""
+    score_file = open('highest_score.txt','w')
+    score_file.write(str(score))
+    score_file.close()
+
+
 # the main function
 def play_game(pseudo = "Joueur"):
     """  Fonction, the main function starting the game """
     grid = generate_grid()
-    liste_position = generate_mines(int(input("combien de mine voulez vous avoir dans la grille ? ")))
-    add_mines_to_grid(liste_position, grid)
+    number_mines = int(input("combien de mine voulez vous avoir dans la grille ? "))
+    liste_position = generate_mines(number_mines)
+    add_mines_to_grid(liste_position, grid, number_mines)
 
     highest_score = get_highest_score()
     first_move = True
@@ -202,6 +209,7 @@ def play_game(pseudo = "Joueur"):
         show_player_grid(grid)
         if case_valid > highest_score:
             print(f"Nouveau record battu {pseudo} ! le score de {case_valid} est atteint")
+            save_highest_score(case_valid)
         choix_joueur = str(input("Que voulez vous faire ?,\ndécouvrir une case: c ; planter un drapeau: d\n")) 
         if choix_joueur == "c": 
             interact_case(first_move, grid)
