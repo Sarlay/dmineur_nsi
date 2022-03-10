@@ -1,6 +1,7 @@
 from random import randint
 from tkinter import *
-
+import colorama
+from colorama import Fore, Back, Style
 
 def generate_grid():  # Raphael
     """Generate the grid
@@ -130,13 +131,12 @@ def get_coordinates(): # Raphael
     return positionx, positiony
 
 
-def interact_case(first_move): # Raphael
+def interact_case(first_move, grid): # Raphael
     positionx, positiony = get_coordinates()
     coo_valid = check_if_coordinate_valid(positionx, positiony)
     coo = positionx, positiony
     if first_move is True: 
         show_near_empty_cases(coo, grid)
-        first_move = False
     print(coo_valid)
     if coo_valid and grid[(positionx, positiony)][2] is False:  # if case not discovered yet 
         if grid[(positionx, positiony)][0] == "-1": # if the case is a mine  
@@ -152,7 +152,7 @@ def interact_case(first_move): # Raphael
             print("Case déja découverte Veuillez choisir une autre case !")
 
 
-def interact_flag(): # Cleante
+def interact_flag(grid): # Cleante
     positionx, positiony = get_coordinates()
     coo_valid = check_if_coordinate_valid(positionx, positiony)
     interaction_type = input("Voulez vous ajouter (a) ou supprimer (s) un drappeau ? (a/s): ") 
@@ -178,24 +178,49 @@ def get_highest_score(): # Cleante
         return 0
 
 # the main function
+def play_game(pseudo = "Joueur"):
+    grid = generate_grid()
+    liste_position = generate_mines()
+    add_mines_to_grid(liste_position, grid)
 
-grid = generate_grid()
-liste_position = generate_mines()
-add_mines_to_grid(liste_position, grid)
+    highest_score = get_highest_score()
+    first_move = True
+    case_valid = 0
 
-highest_score = get_highest_score()
-first_move = True
-case_valid = 0
+    while True:
+        show_player_grid(grid)
+        if case_valid > highest_score:
+            print(f"Nouveau record battu {pseudo} ! le score de {case_valid} est atteint")
+        choix_joueur = str(input("Que voulez vous faire ?,\ndécouvrir une case: c ; planter un drapeau: d\n")) 
+        if choix_joueur == "c": 
+            interact_case(first_move, grid)
+            first_move = False
+            case_valid += 1
+        elif choix_joueur == "d":
+            interact_flag(grid)
+        elif choix_joueur == "NSI":  
+            show_debug_grid(grid)
+    
 
-while True:
-    show_player_grid(grid)
-    if case_valid > highest_score:
-        print("Nouveau record battu ! le score de {case_valid} est atteint")
-    choix_joueur = str(input("Que voulez vous faire ?,\ndécouvrir une case: c ; planter un drapeau: d\n")) 
-    if choix_joueur == "c": 
-        interact_case(first_move)
-        case_valid += 1
-    elif choix_joueur == "d":
-        interact_flag()
-    elif choix_joueur == "NSI":  
-        show_debug_grid(grid) 
+def Credit():
+    print("""Créé par Sarlay et par Cléanteuh \n
+          Créé avec la bibliothèque colorama, random et tkinter""")
+
+  
+
+username = None
+exit_now = False
+colorama.init()
+while exit_now is not True:
+    menu_ask = input("Que voulez vous faire ? Ecrivez JOUER pour lancer le jeu, Ecrivez CREDIT pour afficher les crédits, Ecrivez NOM pour changer de nom \n")
+    if menu_ask == "NOM":
+        username = input("Quel est votre pseudo ?")
+    if menu_ask == "JOUER":
+        if username is not None:
+            play_game(username)
+        else:
+            play_game()
+    if menu_ask == "CREDIT":
+        Credit()
+    
+    
