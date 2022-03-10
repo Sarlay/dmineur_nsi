@@ -3,6 +3,7 @@ from tkinter import *
 import colorama
 from colorama import Fore, Back, Style
 
+
 def generate_grid():  # Raphael
     """Generate the grid
     type:
@@ -187,7 +188,7 @@ def get_highest_score(): # Cleante
 
 
 def save_highest_score(score): # Raphael
-    """ return the highest score stored in highest_score"""
+    """ stores the highest score in highest_score"""
     score_file = open('highest_score.txt','w')
     score_file.write(str(score))
     score_file.close()
@@ -222,10 +223,8 @@ def play_game(pseudo = "Joueur"):
     
 
 def Credit():
-    print("""Créé par Sarlay et par Cléanteuh \n
+    print("""Créé par Raphaël et par Cléante \n
           Créé avec la bibliothèque colorama, random et tkinter""")
-
-  
 
 username = None
 exit_now = False
