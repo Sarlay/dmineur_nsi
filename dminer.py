@@ -31,6 +31,7 @@ def generate_mines():  # cleante
 
 
 def add_mines_to_grid(liste_position, grid): # cleante
+    """ insert mines to specific positions stored in liste_position """
     for i in range(20):
         if liste_position[0] in grid:
             [x,y] = liste_position[0]
@@ -40,6 +41,8 @@ def add_mines_to_grid(liste_position, grid): # cleante
 
 
 def calculate_near_sum(coo, grid): # Raphael
+    """ calculatese the sum of mines surronding a case at specif coordinates 
+    (coo[0]: x axis and coo[1]: y axis)"""
     near_sum = 0
     for x in range(-1, 2):
         for y in range(-1, 2):
@@ -62,7 +65,8 @@ def show_near_empty_cases(coo, grid): # Raphael
                 except:
                     pass
 
-    
+
+
 def show_debug_grid(grid):  # Raphael
     print("""
 ====    grille secrète:  ====
@@ -120,18 +124,21 @@ def show_player_grid(grid):  # Cleante
 
 
 def check_if_coordinate_valid(positionx, positiony):  # cleante
+    """ check if coordinates (positionx and positiony) are valid  """
     if 1 <= positionx <= 10 and 1 <= positiony <= 10:
         return True
     else:
         return False
 
 def get_coordinates(): # Raphael
+    """ ask the user for coordinates """
     positionx = int(input("saisissez l'abscisse de la case: "))   
     positiony = int(input("saisissez l'ordonnée de la case: ")) 
     return positionx, positiony
 
 
 def interact_case(first_move, grid): # Raphael
+    """ click a specific case """
     positionx, positiony = get_coordinates()
     coo_valid = check_if_coordinate_valid(positionx, positiony)
     coo = positionx, positiony
@@ -153,6 +160,7 @@ def interact_case(first_move, grid): # Raphael
 
 
 def interact_flag(grid): # Cleante
+    """ adds or remove a flag at specific coordinates"""
     positionx, positiony = get_coordinates()
     coo_valid = check_if_coordinate_valid(positionx, positiony)
     interaction_type = input("Voulez vous ajouter (a) ou supprimer (s) un drappeau ? (a/s): ") 
@@ -169,6 +177,7 @@ def interact_flag(grid): # Cleante
 
 
 def get_highest_score(): # Cleante
+    """ return the highest score stored in highest_score"""
     score_file = open('highest_score.txt','r')
     score = score_file.read()
     score_file.close()
@@ -179,6 +188,7 @@ def get_highest_score(): # Cleante
 
 # the main function
 def play_game(pseudo = "Joueur"):
+    """  Fonction, the main function starting the game """
     grid = generate_grid()
     liste_position = generate_mines()
     add_mines_to_grid(liste_position, grid)
@@ -212,7 +222,7 @@ username = None
 exit_now = False
 colorama.init()
 while exit_now is not True:
-    menu_ask = input("Que voulez vous faire ? Ecrivez JOUER pour lancer le jeu, Ecrivez CREDIT pour afficher les crédits, Ecrivez NOM pour changer de nom \n")
+    menu_ask = input("Que voulez vous faire ? Ecrivez: \n\n• JOUER pour lancer le jeu \n\n• CREDIT pour afficher les crédits \n\n• NOM pour changer de nom \n\n• SORTIE pour sortir")
     if menu_ask == "NOM":
         username = input("Quel est votre pseudo ?")
     if menu_ask == "JOUER":
@@ -222,5 +232,7 @@ while exit_now is not True:
             play_game()
     if menu_ask == "CREDIT":
         Credit()
+    if menu_ask == "SORTIE":
+        exit_now = True
     
     
