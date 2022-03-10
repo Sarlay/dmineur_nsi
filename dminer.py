@@ -17,11 +17,11 @@ def generate_grid():  # Raphael
     return grid
 
 
-def generate_mines():  # cleante
+def generate_mines(number_mines):  # cleante
     """create the position of 20 random mines"""
     liste_position = []
     mine = 0
-    while mine < 20:
+    while mine < number_mines:
         x=randint(1, 10)
         y=randint(1, 10)
         if (x,y) not in liste_position:
@@ -184,13 +184,14 @@ def get_highest_score(): # Cleante
     if score != "":
         return int(score)
     else:
-        return 0
+        return 0  # no best score saved
+
 
 # the main function
 def play_game(pseudo = "Joueur"):
     """  Fonction, the main function starting the game """
     grid = generate_grid()
-    liste_position = generate_mines()
+    liste_position = generate_mines(int(input("combien de mine voulez vous avoir dans la grille ? ")))
     add_mines_to_grid(liste_position, grid)
 
     highest_score = get_highest_score()
@@ -222,7 +223,8 @@ username = None
 exit_now = False
 colorama.init()
 while exit_now is not True:
-    menu_ask = input("Que voulez vous faire ? Ecrivez: \n\n• JOUER pour lancer le jeu \n\n• CREDIT pour afficher les crédits \n\n• NOM pour changer de nom \n\n• SORTIE pour sortir")
+    print("\033[1;32;40m" + "Meilleur score: " + str(get_highest_score()) + "\033[0m")
+    menu_ask = input("Que voulez vous faire ? Ecrivez: \n\n• JOUER pour lancer le jeu \n\n• CREDIT pour afficher les crédits \n\n• NOM pour changer de nom \n\n• SORTIE pour sortir \n\n")
     if menu_ask == "NOM":
         username = input("Quel est votre pseudo ?")
     if menu_ask == "JOUER":
@@ -234,5 +236,6 @@ while exit_now is not True:
         Credit()
     if menu_ask == "SORTIE":
         exit_now = True
-    
+        exit()
+
     
