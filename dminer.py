@@ -19,7 +19,10 @@ def generate_grid():  # Raphael
 
 
 def generate_mines(number_mines):  # cleante
-    """create the position of number_mines random mines"""
+    """create the position of number_mines random mines
+    returns the list of positions of mines in a list 
+   
+    """
     liste_position = []
     mine = 0
     while mine < number_mines:
@@ -62,7 +65,7 @@ def show_near_empty_cases(coo, grid): # Raphael
             if x != 0 or y != 0:
                 try:
                     if grid[(int(coo[0]-x), int(coo[1]-y))][0] == "0":
-                        grid[(int(coo[0]-x), int(coo[1]-y))][2] = True
+                       grid[(int(coo[0]-x), int(coo[1]-y))][2] = True
                 except:
                     pass
 
@@ -89,6 +92,9 @@ def show_debug_grid(grid):  # Raphael
 
 
 def get_color_prefix(number): # Raphael
+    """ 
+    returns the color to display according to the number of mines 
+    """
     if number == "1":
         return "\033[1;36;40m" # bright cyan
     if number == "2":
@@ -100,26 +106,31 @@ def get_color_prefix(number): # Raphael
     else:
         return ""
 
-def show_player_grid(grid):  # Cleante
-    """Prints the player grid"""
+def show_player_grid(grid):  # Raphael
+    """Prints the player grid
+    
+    x: colones
+    y: lignes
+
+    """
     print("""
 ====    grille démineur:  ====
 """)
     print("      1  2  3  4  5  6  7  8  9  10")
     print("    ________________________________")
-    for y in range(1, 11):
-        if y == 10: ## for print 10 lines
-            print(f"{y} | ", end="")  
-        else:                           ##remove a space because of the 2 digits causing a line shift
+    for y in range(1, 11): # 11 excluded
+        if y == 10: # for the last column
+            print(f"{y} | ", end="")  # print the number at the begining  
+        else:  # remove a space because of the 2 digits causing a line shift
             print(f"{y}  | ", end="")
-        for x in range(1, 11):
-            if grid[(x, y)][1] is True: # if flag is placed here 
+        for x in range(1, 11): # 11 excluded
+            if grid[(x, y)][1] is True: # if flag is placed here, print the flag
                 print("\033[1;33;40m #\033[0m", end=" ")
             elif grid[(x, y)][2] is True: # when the element is discovered by the player it displays it
-                near_sum = str(calculate_near_sum((x,y), grid))
-                print(" " + get_color_prefix(near_sum) + near_sum, end="\033[0m ") 
+                near_sum = str(calculate_near_sum((x,y), grid))  # calculate the number of mines at x, y
+                print(" " + get_color_prefix(near_sum) + near_sum, end="\033[0m ") # prints the number of mines with the correct color
             else:
-                print(" .", end=" ") 
+                print(" .", end=" ") # print a dot if case hasn't been discovered yet
         print("|") 
     print("    --------------------------------")
 
@@ -224,11 +235,13 @@ def play_game(pseudo = "Joueur"):
 
 def Credit():
     print("""Créé par Raphaël et par Cléante \n
-          Créé avec la bibliothèque colorama, random et tkinter""")
+          Créé avec la bibliothèque colorama et random""")
 
 username = None
 exit_now = False
 colorama.init()
+
+open("highest_score.txt", "a+").close()
 while exit_now is not True:
     print("\033[1;32;40m" + "Meilleur score: " + str(get_highest_score()) + "\033[0m")
     menu_ask = input("Que voulez vous faire ? Ecrivez: \n\n• JOUER pour lancer le jeu \n\n• CREDIT pour afficher les crédits \n\n• NOM pour changer de nom \n\n• SORTIE pour sortir \n\n")
