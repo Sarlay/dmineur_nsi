@@ -37,10 +37,9 @@ def generate_mines(number_mines):  # cleante
 def add_mines_to_grid(liste_position, grid, number_mines): # cleante
     """ insert mines to specific positions stored in liste_position """
     for i in range(number_mines):
-        if liste_position[0] in grid:
-            [x,y] = liste_position[0]
-            grid[(x,y)] = ["-1", "0", False]
-            liste_position.remove(liste_position[0])
+        [x,y] = liste_position[0]
+        grid[(x,y)] = ["-1", "0", False]
+        liste_position.remove(liste_position[0])
     return grid
 
 
