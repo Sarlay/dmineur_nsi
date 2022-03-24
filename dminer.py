@@ -14,7 +14,7 @@ def generate_grid():  # Raphael
     grid = {}
     for colonne in range(1, 11):
         for ligne in range(1, 11):
-            grid[(colonne, ligne)] = ["0", False, False]  # [type, number_of_mines_surronding, discovered_bool]
+            grid[(colonne, ligne)] = ["0", False, False]  # [type, flag_placed_here, discovered_bool]
     return grid
 
 
@@ -38,7 +38,7 @@ def add_mines_to_grid(liste_position, grid, number_mines): # cleante
     """ insert mines to specific positions stored in liste_position """
     for i in range(number_mines):
         [x,y] = liste_position[0]
-        grid[(x,y)] = ["-1", "0", False]
+        grid[(x,y)] = ["-1", False, False]  # [type, flag_placed_here, discovered_bool]
         liste_position.remove(liste_position[0])
     return grid
 
