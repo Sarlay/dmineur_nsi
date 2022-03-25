@@ -1,5 +1,4 @@
 from random import randint
-from tkinter import *
 import colorama
 from colorama import Fore, Back, Style
 
