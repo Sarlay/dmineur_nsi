@@ -3,7 +3,7 @@ import colorama
 from colorama import Fore, Back, Style
 
 
-def generate_grid():  # Raphael
+def generate_grid():  # Cléante
     """Generate the grid
     type:
      0: empty
